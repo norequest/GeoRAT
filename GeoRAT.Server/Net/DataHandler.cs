@@ -68,8 +68,8 @@ namespace GeoRAT.Server.Net
         {
             try
             {
-                int total = DataSocket.EndReceive(result);
-                int left = sizeof(int) - total; // How much bytes left to receive.  
+                var total = DataSocket.EndReceive(result);
+                var left = sizeof(int) - total; // How much bytes left to receive.  
                 do
                 {
                     var recv = DataSocket.Receive(PrefixBuffer, total, left, SocketFlags.None);

@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\GeoRAT.Server",
+    "\\GeoRAT.Server\\Core",
+    "\\GeoRAT.Server\\Net"
+  ],
+  "SelectedNode": "\\GeoRAT.Server\\Core\\RemoteDesktopHandler.cs",
+  "PreviewInSolutionExplorer": false
+}

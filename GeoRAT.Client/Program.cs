@@ -96,16 +96,14 @@ namespace GeoRAT.Client
         #endregion
 
         #region Commands
-        static void HandleCommand(byte[] buf, int size)
+        static void HandleCommand(byte[] buf, int size, Socket s)
         {
-
-            Commands k = new Commands();
             CommandHandler handler = new CommandHandler();
             CommandSerializer sr = new CommandSerializer();
             var compressedbuf = Compression.Decompress(buf);
-            k = sr.Deserialize(compressedbuf);
+            var k = sr.Deserialize(compressedbuf);
             Console.WriteLine("Got new data, length {0} bytes", size);
-            handler.Handle(k);
+            handler.Handle(k, s);
         }
 
         #endregion

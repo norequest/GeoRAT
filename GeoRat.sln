@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoRAT.Client", "GeoRAT.Client\GeoRAT.Client.csproj", "{3E45CCE4-CE80-46EE-B896-F1926509C1CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoRAT.Server", "GeoRAT.Server\GeoRAT.Server.csproj", "{3938F2DB-E137-4B6F-AC74-6E8D912479ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoRAT.Core", "GeoRAT.Core\GeoRAT.Core.csproj", "{7D239417-861C-48E7-BC0E-2BB8631FC0BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamLibrary", "..\..\..\Desktop\StreamLibrary-master\StreamLibrary\StreamLibrary.csproj", "{9417F922-6EA9-4811-BB98-8D2A875396C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +29,15 @@ Global
 		{7D239417-861C-48E7-BC0E-2BB8631FC0BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D239417-861C-48E7-BC0E-2BB8631FC0BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D239417-861C-48E7-BC0E-2BB8631FC0BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9417F922-6EA9-4811-BB98-8D2A875396C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9417F922-6EA9-4811-BB98-8D2A875396C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9417F922-6EA9-4811-BB98-8D2A875396C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9417F922-6EA9-4811-BB98-8D2A875396C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3A33EEC-A428-404C-BF52-7F0855B77857}
 	EndGlobalSection
 EndGlobal

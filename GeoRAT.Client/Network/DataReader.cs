@@ -10,7 +10,7 @@ namespace GeoRAT.Client.Network
         #region Declarations
         //delegates and events
 
-        public delegate void Received( byte[] buffer, int MessageSize);
+        public delegate void Received( byte[] buffer, int MessageSize, Socket s);
         public event Received OnReceived;
         public delegate void Disconnected(Socket s);
         public event Disconnected OnDisconnected;
@@ -70,7 +70,7 @@ namespace GeoRAT.Client.Network
             {
                 int total = 0;
 
-                byte[] buffer = new byte[size];
+                var buffer = new byte[size];
                 do
                 {
                     IAsyncResult result = ClientReader.BeginReceive(buffer, total, size, SocketFlags.None, null, null);
@@ -80,7 +80,7 @@ namespace GeoRAT.Client.Network
                     if (received == 0)
                         break;
                 } while (total < size);
-                OnReceived?.Invoke(buffer, size);
+                OnReceived?.Invoke(buffer, size, ClientReader);
 
             }
             catch
