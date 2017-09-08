@@ -18,23 +18,23 @@ namespace GeoRAT.Server.Net
         public delegate void Received(byte[] buf, Socket received);
         public event Received OnReceived;
         public delegate void Disconnected(Socket s);
-        public event Disconnected OnDisconnected; 
+        public event Disconnected OnDisconnected;
 
 
-        private Socket DataSocket;  //Reads data sent by client, first it reads data length, then data itself 
-        private Socket DummySocket;  //Actually does nothing, just checks if socket is connected, if not, raises disconnected event
-        byte[] PrefixBuffer = new byte[4]; //Buffer to store Message length 
-        private static int MessageLength = 0; //Message length sent by client 
+        private readonly Socket _dataSocket;  //Reads data sent by client, first it reads data length, then data itself 
+        private readonly Socket _dummySocket;  //Actually does nothing, just checks if socket is connected, if not, raises disconnected event
+        readonly byte[] _prefixBuffer = new byte[4]; //Buffer to store Message length 
+        private static int _messageLength = 0; //Message length sent by client 
         #endregion
 
         #region Constructor
 
         public DataHandler(Socket s)
         {
-            DataSocket = s;
-            DummySocket = DataSocket;
-            DataSocket.BeginReceive(PrefixBuffer, 0, 4, SocketFlags.None, ReceivedCallback, null); //Begin reading asynchronously
-            DummySocket.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, Dummy, null);  //Dummy function 
+            _dataSocket = s;
+            _dummySocket = _dataSocket;
+            _dataSocket.BeginReceive(_prefixBuffer, 0, 4, SocketFlags.None, ReceivedCallback, null); //Begin reading asynchronously
+            _dummySocket.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, Dummy, null);  //Dummy function 
 
         }
 
@@ -49,14 +49,14 @@ namespace GeoRAT.Server.Net
         {
             try
             {
-                DummySocket.EndReceive(result);
-                DummySocket.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, Dummy, null);
+                _dummySocket.EndReceive(result);
+                _dummySocket.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, Dummy, null);
             }
             catch
             {
-               
-                OnDisconnected?.Invoke(DataSocket);
-           }
+
+                OnDisconnected?.Invoke(_dataSocket);
+            }
 
         }
         #endregion
@@ -68,20 +68,20 @@ namespace GeoRAT.Server.Net
         {
             try
             {
-                int total = DataSocket.EndReceive(result);
-                int left = sizeof(int) - total; // How much bytes left to receive.  
+                var total = _dataSocket.EndReceive(result);
+                var left = sizeof(int) - total; // How much bytes left to receive.  
                 do
                 {
-                    var recv = DataSocket.Receive(PrefixBuffer, total, left, SocketFlags.None);
+                    var recv = _dataSocket.Receive(_prefixBuffer, total, left, SocketFlags.None);
                     left -= recv;
-                } while (left != 0); 
-                var len = BitConverter.ToInt32(PrefixBuffer, 0); //Deserialize received bytes back to INT and get length of packet
-                MessageLength = len; //Assign length to global constant 
-                ReceiveMessage(MessageLength); //Begin reading incoming packets based on length now 
+                } while (left != 0);
+                var len = BitConverter.ToInt32(_prefixBuffer, 0); //Deserialize received bytes back to INT and get length of packet
+                _messageLength = len; //Assign length to global constant 
+                ReceiveMessage(_messageLength); //Begin reading incoming packets based on length now 
             }
             catch
             {
-                OnDisconnected?.Invoke(DataSocket);
+                OnDisconnected?.Invoke(_dataSocket);
 
             }
         }
@@ -101,20 +101,21 @@ namespace GeoRAT.Server.Net
                 byte[] buffer = new byte[size];
                 do
                 {
-                    IAsyncResult result = DataSocket.BeginReceive(buffer, total, size, SocketFlags.None, null, null);
-                    result.AsyncWaitHandle.WaitOne(DataSocket.ReceiveTimeout);
-                    int received = DataSocket.EndReceive(result);
+                    var result = _dataSocket.BeginReceive(buffer, total, size, SocketFlags.None, null, null);
+                    result?.AsyncWaitHandle.WaitOne(_dataSocket.ReceiveTimeout);
+                    if (result == null) continue;
+                    var received = _dataSocket.EndReceive(result);
                     total += received;
                     if (received == 0)
                         break;
                 } while (total < size);
-                OnReceived?.Invoke(buffer, DataSocket);
+                OnReceived?.Invoke(buffer, _dataSocket);
 
             }
             catch
             {
 
-                OnDisconnected?.Invoke(DataSocket);
+                OnDisconnected?.Invoke(_dataSocket);
             }
         }
 
@@ -127,12 +128,12 @@ namespace GeoRAT.Server.Net
         {
             try
             {
-                CommandSerializer serializer = new CommandSerializer();
-                byte[] packet = serializer.Serialize(command);
+                var serializer = new CommandSerializer();
+                var packet = serializer.Serialize(command);
                 var cmpr = Compression.Compress(packet);
                 var len2 = cmpr.Length;
-                DataSocket.Send(BitConverter.GetBytes(len2));
-                DataSocket.BeginSend(cmpr, 0, cmpr.Length, SocketFlags.None, SentCallback, null);
+                _dataSocket.Send(BitConverter.GetBytes(len2));
+                _dataSocket.BeginSend(cmpr, 0, cmpr.Length, SocketFlags.None, SentCallback, null);
 
             }
             catch (Exception ex)
@@ -144,7 +145,7 @@ namespace GeoRAT.Server.Net
 
         private void SentCallback(IAsyncResult result)
         {
-            DataSocket.EndSend(result);
+            _dataSocket.EndSend(result);
         }
 
 

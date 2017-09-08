@@ -2,7 +2,7 @@
 
 public class Response
 {
-    public string IP { get; set; }
+    public string Ip { get; set; }
     public string CountryCode { get; set; }
     public string CountryName { get; set; }
     public string RegionCode { get; set; }

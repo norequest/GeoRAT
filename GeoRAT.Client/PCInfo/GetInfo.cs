@@ -16,19 +16,19 @@ namespace Client
 
         //Seems to work good 
 
-        public static string GetOS()
+        public static string GetOs()
         { 
-           string OS = string.Empty;
-            using (ManagementObjectSearcher MS = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem"))
+           string os = string.Empty;
+            using (ManagementObjectSearcher ms = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem"))
             {
 
-              foreach (ManagementObject _m in MS.Get())
+              foreach (ManagementObject m in ms.Get())
                 {
-                    OS = _m["Caption"].ToString();
+                    os = m["Caption"].ToString();
                 }
             }
   
-            return OS;
+            return os;
             
         }
 
@@ -42,7 +42,7 @@ namespace Client
 
 
            //call ParaseXML Method on this IP, get country information from GeoIP API
-            var country = ParseXML(externalip);
+            var country = ParseXml(externalip);
             return country.CountryName;
 
 
@@ -50,7 +50,7 @@ namespace Client
 
         //Credits to OllyDbg for fast solution 
         //Might replace this with Maxmind's GeoIP C# method later
-        private static Response ParseXML(string ip)
+        private static Response ParseXml(string ip)
         {
             Response ret = new Response();
             try

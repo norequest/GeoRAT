@@ -9,3 +9,15 @@ D:\RAT\GeoRat\GeoRat\GeoRAT.Server\obj\Debug\GeoRAT.Server.exe
 D:\RAT\GeoRat\GeoRat\GeoRAT.Server\obj\Debug\GeoRAT.Server.pdb
 D:\RAT\GeoRat\GeoRat\GeoRAT.Server\obj\Debug\GeoRAT.Server.Desktop.resources
 D:\RAT\GeoRat\GeoRat\GeoRAT.Server\obj\Debug\GeoRAT.Server.DesktopViewer.resources
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\bin\Debug\GeoRAT.Server.exe.config
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\bin\Debug\GeoRAT.Server.exe
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\bin\Debug\GeoRAT.Server.pdb
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.csprojResolveAssemblyReference.cache
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.DesktopViewer.resources
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.Form1.resources
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.Properties.Resources.resources
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.Desktop.resources
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.csproj.GenerateResource.Cache
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.csproj.CoreCompileInputs.cache
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.exe
+C:\Users\Konigstiger\Source\Repos\RatoZaur\GeoRAT.Server\obj\Debug\GeoRAT.Server.pdb

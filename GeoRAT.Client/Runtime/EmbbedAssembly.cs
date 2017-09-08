@@ -13,12 +13,12 @@ namespace GeoRAT.Client.Runtime
     {
         // Version 1.3
 
-        static Dictionary<string, Assembly> dic = null;
+        static Dictionary<string, Assembly> _dic = null;
 
         public static void Load(string embeddedResource, string fileName)
         {
-            if (dic == null)
-                dic = new Dictionary<string, Assembly>();
+            if (_dic == null)
+                _dic = new Dictionary<string, Assembly>();
 
             byte[] ba = null;
             Assembly asm = null;
@@ -38,7 +38,7 @@ namespace GeoRAT.Client.Runtime
                     asm = Assembly.Load(ba);
 
                     // Add the assembly/dll into dictionary
-                    dic.Add(asm.FullName, asm);
+                    _dic.Add(asm.FullName, asm);
                     return;
                 }
                 catch
@@ -85,16 +85,16 @@ namespace GeoRAT.Client.Runtime
 
             asm = Assembly.LoadFile(tempFile);
 
-            dic.Add(asm.FullName, asm);
+            _dic.Add(asm.FullName, asm);
         }
 
         public static Assembly Get(string assemblyFullName)
         {
-            if (dic == null || dic.Count == 0)
+            if (_dic == null || _dic.Count == 0)
                 return null;
 
-            if (dic.ContainsKey(assemblyFullName))
-                return dic[assemblyFullName];
+            if (_dic.ContainsKey(assemblyFullName))
+                return _dic[assemblyFullName];
 
             return null;
         }

@@ -12,14 +12,14 @@ namespace GeoRAT.Core.PacketStruct
 
         public  byte[] Serialize(Info i)
         {
-            using (MemoryStream stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
-                using (BinaryWriter writer = new BinaryWriter(stream))
+                using (var writer = new BinaryWriter(stream))
                 {
                     writer.Write(i.Country);
-                    writer.Write(i.OS);
+                    writer.Write(i.Os);
                     writer.Write(i.UserName);
-                    writer.Write(i.CPU);
+                    writer.Write(i.Cpu);
                 }
                 return stream.ToArray();
             }
@@ -29,15 +29,15 @@ namespace GeoRAT.Core.PacketStruct
 
         public Info Deserialize(byte[] buffer)
         {
-            Info i = new Info();
-            using (MemoryStream stream = new MemoryStream(buffer))
+            var i = new Info();
+            using (var stream = new MemoryStream(buffer))
             {
-                using (BinaryReader read = new BinaryReader(stream))
+                using (var read = new BinaryReader(stream))
                 {
                     i.Country = read.ReadString();
-                    i.OS = read.ReadString();
+                    i.Os = read.ReadString();
                     i.UserName = read.ReadString();
-                    i.CPU = read.ReadString();
+                    i.Cpu = read.ReadString();
 
                 }
             }

